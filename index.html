@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espada | Elite Digital Operations</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Outfit:wght@300;400;500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    
+    <!-- Vanilla Tilt -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
+    <!-- React -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+    
+    <script>
+        // Update Particle Color in JS
+        // This script will run after load, but we can't easily modify the class directly here without re-injecting.
+        // The particle implementation is below in the script tag, we need to update it there.
+    </script>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-inner"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Components -->
+    <div data-include="sections/loading.html"></div>
+    <div data-include="sections/navbar.html"></div>
+    <div data-include="sections/hero.html"></div>
+    <div data-include="sections/about.html"></div>
+    <div data-include="sections/services.html"></div>
+    <div data-include="sections/documentation.html"></div>
+    <div data-include="sections/classified-docs.html"></div>
+    <div data-include="sections/founders.html"></div>
+    <div data-include="sections/join.html"></div>
+    <div data-include="sections/contact.html"></div>
+    <div data-include="sections/footer.html"></div>
+    <div data-include="sections/application-modal.html"></div>
+
+    <!-- Component Loader -->
+    <script>
+        async function includeHTML() {
+            const elements = document.querySelectorAll('[data-include]');
+            const promises = Array.from(elements).map(async (el) => {
+                const file = el.getAttribute('data-include');
+                try {
+                    const response = await fetch(file);
+                    if (response.ok) {
+                        const content = await response.text();
+                        el.outerHTML = content;
+                    } else {
+                        el.innerHTML = 'Phase not found: ' + file;
+                    }
+                } catch (err) {
+                    el.innerHTML = 'Transmission error';
+                }
+            });
+            await Promise.all(promises);
+            
+            // Re-initialize React and main logic
+            if (window.initDocsViewer) window.initDocsViewer();
+            if (window.initWebsite) window.initWebsite();
+            
+            // Trigger DocsViewer script re-injection for Babel if needed
+            // However, we'll link it as a separate babel script below
+        }
+        window.addEventListener('DOMContentLoaded', includeHTML);
+    </script>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script type="text/babel" src="js/docs-viewer.js"></script>
+</body>
+</html>
